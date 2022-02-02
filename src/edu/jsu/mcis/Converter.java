@@ -70,7 +70,7 @@ public class Converter {
             List<String[]> full = reader.readAll();
             Iterator<String[]> iterator = full.iterator();
             
-            // INSERT YOUR CODE HERE
+            //CODE
             
         }        
         catch(Exception e) { e.printStackTrace(); }
@@ -88,7 +88,7 @@ public class Converter {
             StringWriter writer = new StringWriter();
             CSVWriter csvWriter = new CSVWriter(writer, ',', '"', '\\', "\n");
             
-            // INSERT YOUR CODE HERE
+            //CODE
             
         }
         
