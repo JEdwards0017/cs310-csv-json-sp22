@@ -72,6 +72,13 @@ public class Converter {
             
             //CODE
             
+            String[] line = iterator.next();
+            
+            for (String field : line) {
+                System.out.println(field);
+            }
+            
+            
         }        
         catch(Exception e) { e.printStackTrace(); }
         
@@ -88,8 +95,67 @@ public class Converter {
             StringWriter writer = new StringWriter();
             CSVWriter csvWriter = new CSVWriter(writer, ',', '"', '\\', "\n");
             
-            //CODE
+            //parser and object from lecture notes           
+            JSONParser parser = new JSONParser();
+            JSONObject jsonObject = (JSONObject)parser.parse(jsonString);
             
+            //separating each section needed for JSONarrays
+            JSONArray column = (JSONArray)jsonObject.get("colHeaders");
+            JSONArray data = (JSONArray)jsonObject.get("data");
+            JSONArray row = (JSONArray)jsonObject.get("rowHeaders");
+            
+            //for/nested if loop to go through columnsaccording to the
+            //outcome example at the top
+            for(int x = 0; x < column.size(); ++x)
+            {
+                if(x != column.size() - 1)
+                {
+                    writer.append("\"" + column.get(x) + "\",");
+                }
+                else
+                {
+                    writer.append("\"" + column.get(x) + "\"" + "\n");
+                }
+            }
+            
+            //data variables required for rows step as this will act as a
+            //counter to input the data properly
+            int dat = 0;
+            int cnt = 1;
+            
+            //for loop to go through rows and data according to top outcome
+            //nested while/if loops inside to sort through data 
+            for(int x = 0; x < row.size(); ++x)
+            {
+                writer.append("\"" + row.get(x) + "\",");
+                
+                while(dat < cnt)
+                {
+                    //another JSON array to temporarily store the data
+                    JSONArray dataTemp = (JSONArray)data.get(dat);
+                    
+                    //last nested loop to parse through the temp data
+                    //extremely close to the column code above
+                    for(int y = 0; y < dataTemp.size(); ++y)
+                    {
+                        if(y != dataTemp.size() - 1)
+                        {
+                            writer.append("\"" + dataTemp.get(y) + "\",");
+                        }
+                        else
+                        {
+                            writer.append("\"" + dataTemp.get(y) + "\"" + "\n");
+                        }
+                    }
+                    //data exit for while loop
+                    ++dat;
+                }
+                //counter exit for initial for loop
+                ++cnt;
+            }
+            
+            //tostring print for results of JSON to CSV
+            results = writer.toString();
         }
         
         catch(Exception e) { e.printStackTrace(); }
