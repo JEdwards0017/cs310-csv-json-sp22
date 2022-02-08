@@ -70,14 +70,52 @@ public class Converter {
             List<String[]> full = reader.readAll();
             Iterator<String[]> iterator = full.iterator();
             
-            //CODE
+            //making separate string iterator for easier commands/understanding
+            String[] records = iterator.next();
             
-            String[] line = iterator.next();
+            //separating each section needed for JSONarrays (modified from
+            //JSON to CSV converter)
+            JSONParser parser = new JSONParser();
+            JSONObject jsonObj = new JSONObject();
             
-            for (String field : line) {
-                System.out.println(field);
+            JSONArray column = new JSONArray();
+            JSONArray row =  new JSONArray();
+            JSONArray data =  new JSONArray();
+            
+            //for loop for iteration through CSV columns
+            for(int x = 0; x < records.length; ++x)
+            {
+                column.add(records[x]);
             }
             
+            //nested while/for loop to iterate through data and rows
+            while(iterator.hasNext())
+            {
+                  
+                    //new JSONArray to temporarily store data
+                    JSONArray dataTemp;
+                    dataTemp = new JSONArray();
+                    
+                    records = iterator.next();
+                    row.add(records[0]);
+                    
+                for(int x = 1; x < records.length; ++x)
+                {
+                    //another new variable to parse records and add data
+                    int recData = Integer.parseInt(records[x]);
+                    dataTemp.add(recData);
+                }
+                data.add(dataTemp);
+                    
+            }
+            //utilization of jsonObj function to place headings and data
+            jsonObj.put("colHeaders", column);
+            jsonObj.put("rowHeaders", row);
+            jsonObj.put("data", data);
+            
+            
+            //JSON tostring method for results of CSV to JSON
+            results = JSONValue.toJSONString(jsonObj);
             
         }        
         catch(Exception e) { e.printStackTrace(); }
@@ -104,7 +142,7 @@ public class Converter {
             JSONArray data = (JSONArray)jsonObject.get("data");
             JSONArray row = (JSONArray)jsonObject.get("rowHeaders");
             
-            //for/nested if loop to go through columnsaccording to the
+            //for/nested if loop to go through columns according to the
             //outcome example at the top
             for(int x = 0; x < column.size(); ++x)
             {
