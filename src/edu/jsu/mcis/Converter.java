@@ -70,11 +70,11 @@ public class Converter {
             List<String[]> full = reader.readAll();
             Iterator<String[]> iterator = full.iterator();
             
-            //making separate string iterator for easier commands/understanding
+            //separate string iterator for easier use
             String[] records = iterator.next();
             
-            //separating each section needed for JSONarrays (modified from
-            //JSON to CSV converter)
+            //each section needed for JSONarrays
+            //(modified from JSON to CSV converter)
             JSONParser parser = new JSONParser();
             JSONObject jsonObj = new JSONObject();
             
@@ -92,7 +92,7 @@ public class Converter {
             while(iterator.hasNext())
             {
                   
-                    //new JSONArray to temporarily store data
+                    //JSONArray to temporarily store data
                     JSONArray dataTemp;
                     dataTemp = new JSONArray();
                     
@@ -101,20 +101,20 @@ public class Converter {
                     
                 for(int x = 1; x < records.length; ++x)
                 {
-                    //another new variable to parse records and add data
+                    //variable to parse records and filter data
                     int recData = Integer.parseInt(records[x]);
                     dataTemp.add(recData);
                 }
                 data.add(dataTemp);
                     
             }
-            //utilization of jsonObj function to place headings and data
+            //jsonObj function places headings and data
             jsonObj.put("colHeaders", column);
             jsonObj.put("rowHeaders", row);
             jsonObj.put("data", data);
             
             
-            //JSON tostring method for results of CSV to JSON
+            //tostring CSV to JSON
             results = JSONValue.toJSONString(jsonObj);
             
         }        
@@ -137,13 +137,12 @@ public class Converter {
             JSONParser parser = new JSONParser();
             JSONObject jsonObject = (JSONObject)parser.parse(jsonString);
             
-            //separating each section needed for JSONarrays
+            //each section needed for JSONArrays
             JSONArray column = (JSONArray)jsonObject.get("colHeaders");
             JSONArray data = (JSONArray)jsonObject.get("data");
             JSONArray row = (JSONArray)jsonObject.get("rowHeaders");
             
-            //for/nested if loop to go through columns according to the
-            //outcome example at the top
+            //nested loop goes through columns according to example outcome
             for(int x = 0; x < column.size(); ++x)
             {
                 if(x != column.size() - 1)
@@ -156,12 +155,12 @@ public class Converter {
                 }
             }
             
-            //data variables required for rows step as this will act as a
-            //counter to input the data properly
+            //data variables required for rows
+            //act as a counter to input the data properly
             int dat = 0;
             int cnt = 1;
             
-            //for loop to go through rows and data according to top outcome
+            //for loop goes for rows and data according to top outcome
             //nested while/if loops inside to sort through data 
             for(int x = 0; x < row.size(); ++x)
             {
@@ -172,8 +171,7 @@ public class Converter {
                     //another JSON array to temporarily store the data
                     JSONArray dataTemp = (JSONArray)data.get(dat);
                     
-                    //last nested loop to parse through the temp data
-                    //extremely close to the column code above
+                    //last nested loop to parse through the temp data reused
                     for(int y = 0; y < dataTemp.size(); ++y)
                     {
                         if(y != dataTemp.size() - 1)
@@ -192,7 +190,7 @@ public class Converter {
                 ++cnt;
             }
             
-            //tostring print for results of JSON to CSV
+            //tostring JSON to CSV
             results = writer.toString();
         }
         
